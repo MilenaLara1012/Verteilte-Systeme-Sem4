@@ -1,0 +1,10 @@
+Collection 1:
+Studierende ( Name  Alter   Matrikelnr.   E-Mail )
+
+
+Collection 2:
+Kurse ( Titel   Prüfungsform    ECTS-Punkte )
+
+
+Collection 3:
+Dozent ( Name   Fakultät    extern    E-Mail )
