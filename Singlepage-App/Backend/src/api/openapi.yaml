@@ -1,29 +1,30 @@
 openapi: 3.0.0
 info:
-  title: MyAPP
-  description: "__ TODO: Diese Datei durch eine eigene API-Spezifikation ersetzen. __"
+  title: UniVerwaltung
+  version: '1.0'
+  description: |-
+    Unsere UniVerwaltung-App ermöglicht das Verwalten von verschiedenen Stammdaten. Mit dem App können Sie Studierende, Kurse sowie Dozenten einer fiktiven Hochschule verwalten.
+    Die App nutzt dabei einen REST-Webservice zur Kommunikation mit dem Backend. Der Webservice erlaubt dabei die Standard-CRUD-Operationen, also das Suchen, Anzeigen, Anlegen, Bearbeiten und Löschen von Studierenden, Kursen und Dozenten.
   contact:
-    name: Dennis Schulmeister-Zimolong
-    url: https://www.wpvs.de
-    email: dhbw@windows3.de
-  license:
-    name: CC-BY-4.0
-    url: https://creativecommons.org/licenses/by/4.0/deed.de
-  version: "1.0"
+    name: 'Christian Heck, Milena Seeburger, Nina Resch'
+    email: christian@heckimweb.de
 servers:
-- url: http://localhost:3000
-tags:
-- name: Beispiel
+  - url: 'http://localhost:3000'
+    description: Backend im Entwicklungsmodus
+  - url: 'http://localhost:8080'
+    description: Frontend im Entwicklungsmodus
+  - url: 'http://localhost:8081'
+    description: MongoDB Admin GUI
 paths:
   /:
     get:
-      tags:
-      - Index
       summary: Wurzeladresse des Webservices
-      description: Liefert eine HATEOAS-Übersicht aller collections
-      operationId: index
+      tags:
+        - Start
+      operationId: get
+      description: Liefert eine HATEOAS-Ansicht aller collections des Webservices.
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -33,35 +34,209 @@ paths:
                   $ref: '#/components/schemas/HATEOAS_Collection'
                 x-content-type: application/json
 
+  /dozent:
+    get:
+      summary: Dozentenliste durchsuchen
+      tags:
+        - Dozentenliste
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dozent'
+      operationId: get-dozent
+      description: Suche nach Dozenten. Gibt eine Liste aller gespeicherten Dozenten (zu den angegebenen Suchkriterien) zurück.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: vorname
+          description: Gesuchter Vorname
+        - schema:
+            type: string
+          in: query
+          name: nachname
+          description: Gesuchter Nachname
+        - schema:
+            type: string
+          in: query
+          name: fakultaet
+          description: Gesuchte Fakultät
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: Gesuchte E-Mail
+        - schema:
+            type: string
+          in: query
+          name: intern
+          description: Interner oder Externer Dozent
+    post:
+      summary: Neuen Dozent anlegen
+      tags:
+        - Dozentenliste
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dozent'
+      operationId: post-dozent
+      description: |-
+        Einen neuen Dozenten anlegen. Dazu muss ein vollständiges Dozentenobjekt an den Webservice übergeben werden. Es muss mindestens ein Vorname, Nachname sowie die Fakultät des Dozenten mitgegeben werden.
+        Die ID wird beim Anlegen von der Datenbank automatisch generiert.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dozent'
+
+  /dozent/{id}:
+    get:
+      tags:
+        - Dozent
+      summary: Einzelnen Dozenten auslesen
+      description: Auslesen eines einzelnen Dozenten anhand der ID.
+      operationId: get-dozent-id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dozent'
+        '404':
+          description: Not Found 
+    put:
+      tags:
+        - Dozent
+      summary: Dozentendaten überschreiben
+      description: 'Daten eines Dozenten überschreiben. Hiezu muss der vollständige Dozentendatensatz an den Server geschickt werden (inklusive der Felder, die nicht überschrieben wurden).'
+      operationId: put-dozent-id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dozent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dozent'
+        '404':
+          description: Not Found 
+    patch:
+      tags:
+        - Dozent
+      summary: Einzelnes Feld des Dozenten ändern
+      description: 'Daten einzelner Felder eines Dozenten überschreiben. Hiezu müssen nur die Felder an den Server geschickt, die verändert wurden.'
+      operationId: patch-dozent-id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dozent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dozent'
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - Dozent
+      summary: Einzelnen Dozent löschen
+      description: Löschen eines einzelnen Dozenten anhand der ID.
+      operationId: delete-dozent-id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      
 components:
   schemas:
-    HATEOAS_Collection:
-      title: HATEOAS-Links einer Collection
+    Dozent:
+      title: Dozent
       type: object
+      description: |-
+        Ein Eintrag in der Dozentenverwaltung, bestehend aus Vorname, Nachname, Fakultät, E-Mail-Adresse und einem boolschen Wert, der definiert ob der Dozent an der Universität angestellt ist (true) oder als externer Dozent arbeitet (false).
+        Die entsprechende ID wird automatisch von der Datenbank generiert und kann nachträglich nicht mehr verändert werden.
       properties:
-        _name:
+        _links:
+          $ref: '#/components/schemas/HATEOAS_Dozent_Ressource'
+        _id:
           type: string
-        query:
-          $ref: '#/components/schemas/HATEOAS_Link'
-        create:
-          $ref: '#/components/schemas/HATEOAS_Link'
-
-    HATEOAS_Resource:
-      title: HATEOAS-Links einer Resource
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+        fakultaet:
+          type: string
+        intern:
+          type: boolean
+    HATEOAS_Dozent_Ressource:
+      title: HATEOAS_Dozent_Ressource
       type: object
+      description: Verlinkung zu einem einzelnen Dozentendatensatz.
       properties:
         read:
-          $ref: '#/components/schemas/HATEOAS_Link'
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
         update:
-          $ref: '#/components/schemas/HATEOAS_Link'
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
         patch:
-          $ref: '#/components/schemas/HATEOAS_Link'
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
         delete:
-          $ref: '#/components/schemas/HATEOAS_Link'
-
-    HATEOAS_Link:
-      title: HATEOAS-Link
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
+    HATEOAS_Dozent_Link:
+      title: HATEOAS_Dozent_Link
       type: object
+      description: 'Einzelne HATEOAS-Verlinkung für einen Dozenten. Der Link definiert die Adresse, URL und Query Parameter zum Aufruf der jeweiligen Aktion.'
       properties:
         url:
           type: string
@@ -71,5 +246,22 @@ components:
           type: array
           items:
             type: string
-
-  securitySchemes: {}
+    HATEOAS_Collection:
+      title: HATEOAS_Collection
+      type: object
+      description: HATEOAS-Links aller Collections
+      properties:
+        _name:
+          type: string
+        query_dozent:
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
+        create_dozent:
+          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
+tags:
+  - name: Dozent
+  - name: Dozentenliste
+  - name: Kurs
+  - name: Kursliste
+  - name: Start
+  - name: Student
+  - name: Studentenliste

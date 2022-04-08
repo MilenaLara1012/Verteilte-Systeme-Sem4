@@ -20,7 +20,7 @@ class DatabaseFactory {
         // Datenbankverbindung herstellen
         this.client = new MongoClient(connectionUrl);
         await this.client.connect();
-        this.database = this.client.db("app_database");
+        this.database = this.client.db("univerwaltung");
 
         await this._createDemoData();
     }
@@ -33,24 +33,28 @@ class DatabaseFactory {
     async _createDemoData() {
         //// TODO: Methode anpassen, um zur eigenen App passende Demodaten anzulegen ////
         //// oder die Methode ggf. einfach löschen und ihren Aufruf oben entfernen.  ////
-        let examples = this.database.collection("example");
+        let dozenten = this.database.collection("dozenten");
 
-        if (await examples.estimatedDocumentCount() === 0) {
-            examples.insertMany([
+        if (await dozenten.estimatedDocumentCount() === 0) {
+            dozenten.insertMany([
                 {
-                    title: "Cloud Native Architecture and Design",
-                    author: "Shivakumar R Goniwada",
-                    publisher: "Apress",
-                    year: 2022,
+                    vorname: "Christian",
+                    nachname: "Heck",
+                    fakultaet: "Wirtschaftsinformatik",
+                    email: "christian@heckimweb.de",
+                    intern: true,
                 },
                 {
-                    title: "Machine Learning Kompakt",
-                    author: "Andriy Burkov",
-                    publisher: "mitp",
-                    year: 2019,
+                    vorname: "Max",
+                    nachname: "Mustermann",
+                    fakultaet: "BWL",
+                    email: "max@mustermann.de",
+                    intern: false,
                 },
             ]);
         }
+
+        // Hier müsstet ihre eure Collections entsprechend wie oben noch implementieren @MilenaLara1012 @Reschni96
     }
 }
 
