@@ -7,6 +7,7 @@ import OpenApiEnforcerMiddleware from "@dschulmeis/restify-openapi-enforcer-midd
 //// TODO: Weitere Controller-Klassen importieren ////
 import DatabaseFactory from "./database.js";
 import RootController from "./controller/root.controller.js";
+import DozentController from "./controller/dozent.controller.js";
 
 // Verzeichnisnamen der Quellcodedatei ermitteln
 import path from "path";
@@ -92,6 +93,10 @@ server.use(OpenApiEnforcerMiddleware(openApiEnforcer));
 // HTTP-Controller registrieren
 //// TODO: Weitere Controller-Klassen hinufügen ////
 new RootController(server, "/");
+// Controller-Klasse für Dozenten
+new DozentController(server, "/dozent");
+// @MilenaLara1012 @Reschni96 Hier eure Controller-Klassen eintragen
+
 
 // Server tatsächlich starten
 server.listen(config.port, config.host, function() {
