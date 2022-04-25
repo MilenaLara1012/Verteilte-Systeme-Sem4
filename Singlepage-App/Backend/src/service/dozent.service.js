@@ -45,7 +45,7 @@ export default class DozentService {
             nachname: dozent.nachname || "",
             fakultaet: dozent.fakultaet || "",
             email: dozent.email || "",
-            intern: dozent.intern || false,
+            status: dozent.status || "",
         };
 
         let result = await this._dozenten.insertOne(newDozent);
@@ -91,8 +91,8 @@ export default class DozentService {
         if(dozent.email) {
             updateDoc.$set.email = dozent.email;
         }
-        if(dozent.intern) {
-            updateDoc.$set.intern = dozent.intern;
+        if(dozent.status) {
+            updateDoc.$set.status = dozent.status;
         }
 
         await this._dozenten.updateOne({_id: new ObjectId(id)}, updateDoc);

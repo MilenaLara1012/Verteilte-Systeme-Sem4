@@ -42,14 +42,14 @@ class DatabaseFactory {
                     nachname: "Heck",
                     fakultaet: "Wirtschaftsinformatik",
                     email: "christian@heckimweb.de",
-                    intern: true,
+                    status: "intern",
                 },
                 {
                     vorname: "Max",
                     nachname: "Mustermann",
                     fakultaet: "BWL",
                     email: "max@mustermann.de",
-                    intern: false,
+                    status: "extern",
                 },
             ]);
         }
