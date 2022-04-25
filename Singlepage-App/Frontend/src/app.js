@@ -28,6 +28,15 @@ class App {
                 show: () => this._gotoList()
             },
             //// TODO: Eigene Routing-Regeln hier in der Mitte einfügen ////
+            // Routing-Regeln für Dozent
+            {
+                url: "^/newDozent/$",
+                show: () => this._gotoNewDozent()
+            },
+            {
+                url: "^/editDozent/(.*)$",
+                show: matches => this._gotoEditDozent(matches[1]),
+            },
             {
                 url: ".*",
                 show: () => this._gotoList()
@@ -70,6 +79,37 @@ class App {
             await page.init();
             this._showPage(page, "list");
         } catch (ex) {
+            this.showException(ex);
+        }
+    }
+
+    /**
+     * Seite zum Anlegen eines Dozenten anzeigen
+     */
+    async _gotoNewDozent() {
+        try {
+            let {default: PageEditDozent} = await import("./page-dozent-edit/page-dozent-edit.js");
+
+            let page = new PageEditDozent(this);
+            await page.init();
+            this._showPage(page, "newDozent");
+        } catch(ex) {
+            this.showException(ex);
+        }
+    }
+
+    /**
+     * Seite zum Bearbeiten eines DOzenten anzeigen
+     * @param {Integer} id ID des zu bearbeitenden Datensatzes
+     */
+    async _gotoEditDozent(id) {
+        try {
+            let {default: PageEditDozent} = await import("./page-dozent-edit/page-dozent-edit.js");
+
+            let page = new PageEditDozent(this, id);
+            await page.init();
+            this._showPage(page, "editDozent");
+        } catch(ex) {
             this.showException(ex);
         }
     }

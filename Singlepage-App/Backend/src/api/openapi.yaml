@@ -203,7 +203,7 @@ components:
       title: Dozent
       type: object
       description: |-
-        Ein Eintrag in der Dozentenverwaltung, bestehend aus Vorname, Nachname, Fakultät, E-Mail-Adresse und einem boolschen Wert, der definiert ob der Dozent an der Universität angestellt ist (true) oder als externer Dozent arbeitet (false).
+        Ein Eintrag in der Dozentenverwaltung, bestehend aus Vorname, Nachname, Fakultät, E-Mail-Adresse und einem Status, der die Werte "intern" für interner Dozent und "extern" für externer Dozent annehmen kann.
         Die entsprechende ID wird automatisch von der Datenbank generiert und kann nachträglich nicht mehr verändert werden.
       properties:
         _links:
@@ -218,8 +218,8 @@ components:
           type: string
         fakultaet:
           type: string
-        intern:
-          type: boolean
+        status:
+          type: string
     HATEOAS_Dozent_Ressource:
       title: HATEOAS_Dozent_Ressource
       type: object
