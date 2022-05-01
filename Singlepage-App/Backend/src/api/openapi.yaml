@@ -32,8 +32,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/HATEOAS_Collection'
-                x-content-type: application/json
-
   /dozent:
     get:
       summary: Dozentenliste durchsuchen
@@ -96,8 +94,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Dozent'
-
-  /dozent/{id}:
+  '/dozent/{id}':
     get:
       tags:
         - Dozent
@@ -105,13 +102,13 @@ paths:
       description: Auslesen eines einzelnen Dozenten anhand der ID.
       operationId: get-dozent-id
       parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -120,7 +117,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Dozent'
         '404':
-          description: Not Found 
+          description: Not Found
     put:
       tags:
         - Dozent
@@ -128,13 +125,13 @@ paths:
       description: 'Daten eines Dozenten überschreiben. Hiezu muss der vollständige Dozentendatensatz an den Server geschickt werden (inklusive der Felder, die nicht überschrieben wurden).'
       operationId: put-dozent-id
       parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -148,7 +145,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Dozent'
         '404':
-          description: Not Found 
+          description: Not Found
     patch:
       tags:
         - Dozent
@@ -156,13 +153,13 @@ paths:
       description: 'Daten einzelner Felder eines Dozenten überschreiben. Hiezu müssen nur die Felder an den Server geschickt, die verändert wurden.'
       operationId: patch-dozent-id
       parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -184,19 +181,141 @@ paths:
       description: Löschen eines einzelnen Dozenten anhand der ID.
       operationId: delete-dozent-id
       parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       responses:
         '204':
           description: No Content
         '404':
           description: Not Found
-      
+  /kurse:
+    get:
+      summary: Kurse anzeigen
+      tags:
+        - Kursliste
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kurse'
+      operationId: get-kurse
+      description: Suche nach Kursen und gebe Liste von Kursen entsprechend der Parameter zurück.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: name
+          description: Gesuchter Kursname
+        - schema:
+            type: string
+          in: query
+          name: prüfungsform
+          description: Gesuchte Prüfungsform
+        - schema:
+            type: integer
+          in: query
+          name: ects
+          description: Gesuchte ECTS-Punkte
+    post:
+      summary: Kurse hinzufügen
+      tags:
+        - Kursliste
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kurse'
+      operationId: post-kurse
+      description: |-
+        Neuen Kurs anlegen mit Name, Prüfungsform als string und ECTS als Integer.
+        Id ist auto-generiert.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kurse'
+  '/kurse/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Kurs anzeigen
+      tags:
+        - Kurs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kurse'
+        '404':
+          description: Not Found
+      operationId: get-kurse-id
+      description: Einen Kurs mit ID anzeigen.
+    put:
+      summary: Kurs einfügen
+      tags:
+        - Kurs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kurse'
+        '404':
+          description: Not Found
+      operationId: put-kurse-id
+      description: Überschreibe Kurs mit angegebener ID (außer ID-Feld)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kurse'
+    patch:
+      summary: Kurs ändern
+      tags:
+        - Kurs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kurse'
+        '404':
+          description: Not Found
+      operationId: patch-kurse-id
+      description: Ändere Kurs mit angegebener ID.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kurse'
+    delete:
+      summary: Kurs löschen
+      tags:
+        - Kurs
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      operationId: delete-kurse-id
+      description: Lösche Kurs mit angegebener ID.
 components:
   schemas:
     Dozent:
@@ -227,9 +346,7 @@ components:
       properties:
         read:
           $ref: '#/components/schemas/HATEOAS_Dozent_Link'
-        update:
-          $ref: '#/components/schemas/HATEOAS_Dozent_Link'
-        patch:
+        '':
           $ref: '#/components/schemas/HATEOAS_Dozent_Link'
         delete:
           $ref: '#/components/schemas/HATEOAS_Dozent_Link'
@@ -257,6 +374,51 @@ components:
           $ref: '#/components/schemas/HATEOAS_Dozent_Link'
         create_dozent:
           $ref: '#/components/schemas/HATEOAS_Dozent_Link'
+        query_kurse:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+        create_kurse:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+    Kurse:
+      title: Kurse
+      type: object
+      properties:
+        _link:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Ressource'
+        _id:
+          type: string
+        Name:
+          type: string
+        Prüfungsform:
+          type: string
+        ECTS:
+          type: integer
+      description: 'Einträge für Kurse, bestehend aus ID (auto-generated), Name (String), Prüfungsform (String), ECTS (integer).'
+    HATEOAS_Kurse_Ressource:
+      title: HATEOAS_Kurse_Ressource
+      type: object
+      properties:
+        read:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+        update:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+        patch:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+        delete:
+          $ref: '#/components/schemas/HATEOAS_Kurse_Link'
+      description: Verlinkung auf Ressourcen der Kurse.
+    HATEOAS_Kurse_Link:
+      title: HATEOAS_Kurse_Link
+      type: object
+      properties:
+        url:
+          type: string
+        method:
+          type: string
+        query_params:
+          type: array
+          items:
+            type: string
+      description: 'HATEOAS-Verlinkung für einzelnen Kurs. '
 tags:
   - name: Dozent
   - name: Dozentenliste
