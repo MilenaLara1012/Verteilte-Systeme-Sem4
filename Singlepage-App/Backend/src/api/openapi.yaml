@@ -316,6 +316,168 @@ paths:
           description: Not Found
       operationId: delete-kurse-id
       description: Lösche Kurs mit angegebener ID.
+
+      /studierender:
+        get:
+          summary: Liste der Studierenden durchsuchen
+          tags:
+            - Studierendenliste
+          responses:
+            '200':
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Studierender'
+      operationId: get-studierender
+      description: Nach Studierendem / Studierenden suchen; Rückgabe aller auf die Suchkriterien passenden Studierenden in Form einer Liste
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: vorname
+          description: gesuchter vorname
+        - schema:
+            type: string
+          in: query
+          name: nachname
+          description: gesuchter Nachname
+        - schema:
+            type: int
+          in: query
+          name: alter
+          description: gesuchtes Alter
+        - schema:
+            type: int
+          in: query
+          name: matrikelnr
+          description: gesuchte Matrikelnummer
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: gesuchte EMail
+      post:
+        summary: Neuen Studirenden / Studierende anlegen
+        tags:
+          - Studierendenliste
+        responses:
+          '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Studierender'
+        operationId: post-studierender
+        description: |-
+          Neuen Studierenden anlegen
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Studierender'
+      '/studierender/{id}':
+        get:
+          tags:
+            - Studierender
+          summary: einen einzelnen Studierenden auslesen
+          description: einen einzelnen Studierenden auslesen mittels ID
+          operationId: get-studierender-id
+          parameters:
+            - name: id
+              in: path
+              required: true
+              style: simple
+              explode: false
+              schema:
+                type: string
+         responses:
+           '200':
+             description: OK
+             content:
+               application/json:
+                 schema:
+                   $ref: '#/components/schemas/Studierender'
+          '404':
+            description: Not found
+      put:
+        tags:
+          - Studierender
+        summary: Daten eines Studierenden überschreiben
+        description: Daten eines Studirenden überschreiben
+        operationId: put-studierender-id
+        parameters:
+          - name: id
+            in: path
+            required: true
+            style: simple
+            explode: false
+            schema:
+              type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Studierender'
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Studierender'
+          '404':
+            description: not found
+      patch:
+        tags:
+          - Studierender
+        summary: ein einzelnes Feld eines Studierenden ändern
+        description: ein einzelnes Feld eines Studierenden ändern
+        operationId: patch-studierender-id
+        parameters:
+          - name: id
+            in: path
+            required: true
+            style: simple
+            explode: false
+            schema:
+              type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Studierender'
+        responses:
+          '202':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Studierender'
+          '404':
+            description: not found
+        delete:
+          tags:
+            - Studierender
+          summary: einen einzelnen Studierenden löschen
+          description: einen einzelnen Studierenden löschen mittels ID
+          operationId: delete-studierender-id
+          parameters:
+            - name: id
+              in: path
+              required: true
+              style: simple
+              explode: false
+              schema:
+                type: string
+          responses:
+            '204':
+              description: no Content
+            '404':
+              description: not found
+
 components:
   schemas:
     Dozent:
@@ -419,6 +581,50 @@ components:
           items:
             type: string
       description: 'HATEOAS-Verlinkung für einzelnen Kurs. '
+
+    Studierende:
+      title: Studierende
+      type: object
+      properties:
+        _link:
+          $ref: '#/components/schemas/HATEOAS_Studierender_Ressource'
+        _id:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+        alter:
+          type: int
+        matrikelnr:
+          type: int
+        email:
+          type: string
+      HATEOAS_Studierender_Ressource:
+        title: HATEOAS_Studierender_Ressource
+        type: object
+        description: Verlinkung zu einem einzelnen Studierenden-Datensatz
+        properties:
+          read:
+            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+          '':
+            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+          delete:
+            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+      HATEOAS_Studierender_Link:
+        title: HATEOAS_Studierender_Link
+        type: object
+        description: eine einzelne HATEOAS-Verlinkung für einen Studierenden
+        properties:
+          url:
+            type: string
+          method:
+            type: string
+          query_params:
+            type: array
+            items:
+              type: string
+
 tags:
   - name: Dozent
   - name: Dozentenliste
