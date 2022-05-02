@@ -95,7 +95,9 @@ server.use(OpenApiEnforcerMiddleware(openApiEnforcer));
 new RootController(server, "/");
 // Controller-Klasse für Dozenten
 new DozentController(server, "/dozent");
-// @MilenaLara1012 @Reschni96 Hier eure Controller-Klassen eintragen
+// @MilenaLara1012 Hier Controller-Klasse eintragen
+new KursController(server, "/kurse");
+
 
 
 // Server tatsächlich starten

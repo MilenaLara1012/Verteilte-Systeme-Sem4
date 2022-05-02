@@ -34,6 +34,7 @@ class DatabaseFactory {
         //// TODO: Methode anpassen, um zur eigenen App passende Demodaten anzulegen ////
         //// oder die Methode ggf. einfach löschen und ihren Aufruf oben entfernen.  ////
         let dozenten = this.database.collection("dozenten");
+		let kurse = this.database.collection("kurse")
 
         if (await dozenten.estimatedDocumentCount() === 0) {
             dozenten.insertMany([
@@ -53,8 +54,23 @@ class DatabaseFactory {
                 },
             ]);
         }
+		
+		if (await kurse.estimatedDocumentCount() === 0) {
+            kurse.insertMany([
+                {
+                    name: "Mathematik",
+                    prüfungsform: "Klausur",
+					ects: 6,
+                },
+                {
+                    name: "Verteilte Systeme",
+                    prüfungsform: "Portfolio",
+					ects: 8,
+                },
+            ]);
+        }
 
-        // Hier müsstet ihre eure Collections entsprechend wie oben noch implementieren @MilenaLara1012 @Reschni96
+        // Hier müsstet ihre eure Collections entsprechend wie oben noch implementieren @MilenaLara1012 
     }
 }
 
