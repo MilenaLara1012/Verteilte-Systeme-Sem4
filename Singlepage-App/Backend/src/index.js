@@ -8,6 +8,7 @@ import OpenApiEnforcerMiddleware from "@dschulmeis/restify-openapi-enforcer-midd
 import DatabaseFactory from "./database.js";
 import RootController from "./controller/root.controller.js";
 import DozentController from "./controller/dozent.controller.js";
+import KursController from "./controller/kurs.controller.js";
 
 // Verzeichnisnamen der Quellcodedatei ermitteln
 import path from "path";
