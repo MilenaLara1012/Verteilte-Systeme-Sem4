@@ -1,6 +1,6 @@
 "use strict"
 
-import DozentService from "../service/dozent.service.js";
+import KursService from "../service/kurs.service.js";
 import { wrapHandler } from "../utils.js";
 import RestifyError from "restify-errors";
 
