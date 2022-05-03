@@ -41,6 +41,20 @@ class App {
                 url: ".*",
                 show: () => this._gotoList()
             },
+
+            // Routing-Regeln für Studierender
+            {
+                url: "^/newStudierender/$",
+                show: () => this._gotoNewStudierender()
+            },
+            {
+                url: "^/editStudierender/(.*)$",
+                show: matches => this._gotoEditStudierender(matches[1]),
+            },
+            {
+                url: ".*",
+                show: () => this._gotoList()
+            },
         ]);
 
         // Fenstertitel merken, um später den Name der aktuellen Seite anzuhängen
@@ -110,6 +124,34 @@ class App {
             await page.init();
             this._showPage(page, "editDozent");
         } catch(ex) {
+            this.showException(ex);
+        }
+    }
+
+    // Studierende
+    /**
+     * Seite zum Anlegen eines Studierenden anzeigen
+     */
+    async _gotoNewStudierender() {
+        try {
+            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-studierender-edit.js");
+
+            let page = new PageEditStudierender(this);
+            await page.init();
+            this._showPage(page, "newStudierender");
+        } catch (ex) {
+            this.showException(ex);
+        }
+    }
+
+    async _gotoEditStudierender(id) {
+        try {
+            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-dozent-edit.js");
+
+            let page = new PageEditStudierender(this, id);
+            await page.init();
+            this._showPage(page, "editStudierender");
+        } catch (ex) {
             this.showException(ex);
         }
     }
