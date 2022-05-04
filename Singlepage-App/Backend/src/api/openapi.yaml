@@ -3,7 +3,7 @@ info:
   title: UniVerwaltung
   version: '1.0'
   description: |-
-    Unsere UniVerwaltung-App ermöglicht das Verwalten von verschiedenen Stammdaten. Mit dem App können Sie Studierende, Kurse sowie Dozenten einer fiktiven Hochschule verwalten.
+    Unsere UniVerwaltung-App ermöglicht das Verwalten von verschiedenen Stammdaten. Mit der App können Sie Studierende, Kurse sowie Dozenten einer fiktiven Hochschule verwalten.
     Die App nutzt dabei einen REST-Webservice zur Kommunikation mit dem Backend. Der Webservice erlaubt dabei die Standard-CRUD-Operationen, also das Suchen, Anzeigen, Anlegen, Bearbeiten und Löschen von Studierenden, Kursen und Dozenten.
   contact:
     name: 'Christian Heck, Milena Seeburger, Nina Resch'
@@ -316,168 +316,167 @@ paths:
           description: Not Found
       operationId: delete-kurse-id
       description: Lösche Kurs mit angegebener ID.
-
-      /studierender:
-        get:
-          summary: Liste der Studierenden durchsuchen
-          tags:
-            - Studierendenliste
-          responses:
-            '200':
-              description: OK
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Studierender'
+  /studierender:
+    get:
+      summary: Studierendenliste durchsuchen
+      tags:
+        - Studierendenliste
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Studierender'
       operationId: get-studierender
-      description: Nach Studierendem / Studierenden suchen; Rückgabe aller auf die Suchkriterien passenden Studierenden in Form einer Liste
+      description: Suche nach Studierenden. Gibt eine Liste aller gespeicherten Studierenden (zu den angegebenen Suchkriterien) zurück.
       parameters:
         - schema:
             type: string
           in: query
           name: vorname
-          description: gesuchter vorname
+          description: Gesuchter Vorname
         - schema:
             type: string
           in: query
           name: nachname
-          description: gesuchter Nachname
+          description: Gesuchter Nachname
         - schema:
-            type: int
+            type: string
           in: query
           name: alter
-          description: gesuchtes Alter
-        - schema:
-            type: int
-          in: query
-          name: matrikelnr
-          description: gesuchte Matrikelnummer
+          description: Gesuchtes Alter
         - schema:
             type: string
           in: query
           name: email
-          description: gesuchte EMail
-      post:
-        summary: Neuen Studirenden / Studierende anlegen
-        tags:
-          - Studierendenliste
-        responses:
-          '201':
-            description: Created
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Studierender'
-        operationId: post-studierender
-        description: |-
-          Neuen Studierenden anlegen
-        requestBody:
+          description: Gesuchte E-Mail
+        - schema:
+            type: string
+          in: query
+          name: matrikelnummer
+          description: Matrikelnummer
+    post:
+      summary: Neuen Studierenden anlegen
+      tags:
+        - Studierendenliste
+      responses:
+        '201':
+          description: Created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Studierender'
-      '/studierender/{id}':
-        get:
-          tags:
-            - Studierender
-          summary: einen einzelnen Studierenden auslesen
-          description: einen einzelnen Studierenden auslesen mittels ID
-          operationId: get-studierender-id
-          parameters:
-            - name: id
-              in: path
-              required: true
-              style: simple
-              explode: false
-              schema:
-                type: string
-         responses:
-           '200':
-             description: OK
-             content:
-               application/json:
-                 schema:
-                   $ref: '#/components/schemas/Studierender'
-          '404':
-            description: Not found
-      put:
-        tags:
-          - Studierender
-        summary: Daten eines Studierenden überschreiben
-        description: Daten eines Studirenden überschreiben
-        operationId: put-studierender-id
-        parameters:
-          - name: id
-            in: path
-            required: true
-            style: simple
-            explode: false
+      operationId: post-studierender
+      description: |-
+        Einen neuen Studierenden anlegen. Dazu muss ein vollständiges Studierendenobjekt an den Webservice übergeben werden. Es muss mindestens ein Vorname, Nachname sowie die Matrikelnummer des Studierenden mitgegeben werden.
+        Die ID wird beim Anlegen von der Datenbank automatisch generiert.
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-        requestBody:
+              $ref: '#/components/schemas/Studierender'
+  '/studierender/{id}':
+    get:
+      tags:
+        - Studierender
+      summary: Einzelnen Studierenden auslesen
+      description: Auslesen eines einzelnen Studierenden anhand der ID.
+      operationId: get-studierender-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Studierender'
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Studierender'
-          '404':
-            description: not found
-      patch:
-        tags:
-          - Studierender
-        summary: ein einzelnes Feld eines Studierenden ändern
-        description: ein einzelnes Feld eines Studierenden ändern
-        operationId: patch-studierender-id
-        parameters:
-          - name: id
-            in: path
-            required: true
-            style: simple
-            explode: false
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - Studierender
+      summary: Studierendendaten überschreiben
+      description: 'Daten eines Studierenden überschreiben. Hiezu muss der vollständige Studierendendatensatz an den Server geschickt werden (inklusive der Felder, die nicht überschrieben wurden).'
+      operationId: put-studierender-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-        requestBody:
+              $ref: '#/components/schemas/Studierender'
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Studierender'
-        responses:
-          '202':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Studierender'
-          '404':
-            description: not found
-        delete:
-          tags:
-            - Studierender
-          summary: einen einzelnen Studierenden löschen
-          description: einen einzelnen Studierenden löschen mittels ID
-          operationId: delete-studierender-id
-          parameters:
-            - name: id
-              in: path
-              required: true
-              style: simple
-              explode: false
+        '404':
+          description: Not Found
+    patch:
+      tags:
+        - Studierender
+      summary: Einzelnes Feld des Studierenden ändern
+      description: 'Daten einzelner Felder eines Studierenden überschreiben. Hiezu müssen nur die Felder an den Server geschickt, die verändert wurden.'
+      operationId: patch-studierender-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Studierender'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
               schema:
-                type: string
-          responses:
-            '204':
-              description: no Content
-            '404':
-              description: not found
-
+                $ref: '#/components/schemas/Studierender'
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - Studierender
+      summary: Einzelnen Studierenden löschen
+      description: Löschen eines einzelnen Studierenden anhand der ID.
+      operationId: delete-studierender-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
 components:
   schemas:
     Dozent:
@@ -581,12 +580,14 @@ components:
           items:
             type: string
       description: 'HATEOAS-Verlinkung für einzelnen Kurs. '
-
-    Studierende:
-      title: Studierende
+    Studierender:
+      title: Studierender
       type: object
+      description: |-
+        Ein Eintrag in der Studierendenverwaltung, bestehend aus Vorname, Nachname, Alter, E-Mail-Adresse und der Matrikelnummer.
+        Die entsprechende ID wird automatisch von der Datenbank generiert und kann nachträglich nicht mehr verändert werden.
       properties:
-        _link:
+        _links:
           $ref: '#/components/schemas/HATEOAS_Studierender_Ressource'
         _id:
           type: string
@@ -594,37 +595,36 @@ components:
           type: string
         nachname:
           type: string
-        alter:
-          type: int
-        matrikelnr:
-          type: int
         email:
           type: string
-      HATEOAS_Studierender_Ressource:
-        title: HATEOAS_Studierender_Ressource
-        type: object
-        description: Verlinkung zu einem einzelnen Studierenden-Datensatz
-        properties:
-          read:
-            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
-          '':
-            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
-          delete:
-            $ref: '#/components/schemas/HATEOAS_Studierender_Link'
-      HATEOAS_Studierender_Link:
-        title: HATEOAS_Studierender_Link
-        type: object
-        description: eine einzelne HATEOAS-Verlinkung für einen Studierenden
-        properties:
-          url:
+        alter:
+          type: string
+        matrikelnummer:
+          type: string
+    HATEOAS_Studierender_Ressource:
+      title: HATEOAS_Studierender_Ressource
+      type: object
+      description: Verlinkung zu einem einzelnen Studierendendatensatz.
+      properties:
+        read:
+          $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+        '':
+          $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+        delete:
+          $ref: '#/components/schemas/HATEOAS_Studierender_Link'
+    HATEOAS_Studierender_Link:
+      title: HATEOAS_Studierender_Link
+      type: object
+      description: 'Einzelne HATEOAS-Verlinkung für einen Studierenden. Der Link definiert die Adresse, URL und Query Parameter zum Aufruf der jeweiligen Aktion.'
+      properties:
+        url:
+          type: string
+        method:
+          type: string
+        query_params:
+          type: array
+          items:
             type: string
-          method:
-            type: string
-          query_params:
-            type: array
-            items:
-              type: string
-
 tags:
   - name: Dozent
   - name: Dozentenliste
