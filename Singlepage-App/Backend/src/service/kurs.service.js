@@ -23,7 +23,7 @@ export default class KursService {
         let cursor = this._kurse.find(query, {
             sort: {
                 name: 1,
-                prüfungsform: 1,
+                pruefungsform: 1,
             }
         });
 
@@ -40,9 +40,9 @@ export default class KursService {
         kurs = kurs || {};
 
         let new_kurs = {
-            name: kurs.first_name || "",
-            prüfungsform:  kurs.last_name  || "",
-            ects:      kurs.phone      || 0,
+            name: kurs.name || "",
+            pruefungsform:  kurs.pruefungsform  || "",
+            ects:      kurs.ects     || "",
             
         };
 
@@ -77,7 +77,7 @@ export default class KursService {
         }
 
         if (kurs.name) updateDoc.$set.name = kurs.name;
-        if (kurs.prüfungsform)  updateDoc.$set.prüfungsform  = kurs.prüfungsform;
+        if (kurs.pruefungsform)  updateDoc.$set.pruefungsform  = kurs.pruefungsform;
         if (kurs.ects)      updateDoc.$set.ects      = kurs.ects;
         
 

@@ -34,9 +34,14 @@ export default class PageList extends Page {
         this._title = "Übersicht";
 
         let data_dozent = await this._app.backend.fetch("GET", "/dozent");
+        let data_kurse = await this._app.backend.fetch("GET", "/kurse");
         this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
 
         if(data_dozent.length) {
+            this._emptyMessageElement.classList.add("hidden");
+        }
+
+        if(data_kurse.length) {
             this._emptyMessageElement.classList.add("hidden");
         }
 
@@ -82,10 +87,49 @@ export default class PageList extends Page {
             liDozentElement.remove();
             olDozentElement.appendChild(liDozentElement);
 
-            //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
-            liDozentElement.querySelector(".action.edit_dozent").addEventListener("click", () => location.hash = `#/editDozent/${dataset_dozent._id}`);
-            liDozentElement.querySelector(".action.delete_dozent").addEventListener("click", () => this._askDelete(dataset_dozent._id));
+             //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
+             liDozentElement.querySelector(".action.edit_dozent").addEventListener("click", () => location.hash = `#/editDozent/${dataset_dozent._id}`);
+             liDozentElement.querySelector(".action.delete_dozent").addEventListener("click", () => this._askDelete(dataset_dozent._id));
+ 
         }
+
+
+        let olKurseElement = this._mainElement.querySelector("ol");
+
+        let templateKurseElement = this._mainElement.querySelector(".list-kurse-entry");
+        let templateKurseHtml = templateKurseElement.outerHTML;
+        templateKurseElement.remove();
+
+        
+
+        for(let index in data_kurse) {
+            // Platzhalter ersetzen
+            let entry_kurse = data_kurse[index];
+            let htmlKurs = templateKurseHtml;
+
+            // Daten speichern
+            let _id = entry_kurse._id;
+            let kursname = entry_kurse.name;
+            let prüfungsform = entry_kurse.pruefungsform;
+            let ects = entry_kurse.ects;
+
+
+            // Daten ins html
+            htmlKurs = htmlKurs.replace("$ID$", _id).replace("$TITEL$", kursname).replace("$PRUEFUNGSFORM$", prüfungsform).replace("$ECTS$", ects);
+           
+
+            // Kurs Liste einfügen
+            let dummyKursElement = document.createElement("div");
+            dummyKursElement.innerHTML = htmlKurs;
+            let liKurseElement = dummyKursElement.firstElementChild;
+            liKurseElement.remove();
+            olKurseElement.appendChild(liKurseElement);
+
+            liKurseElement.querySelector(".action.edit_kurs").addEventListener("click", () => location.hash = `#/ediKurs/${entry_kurse._id}`);
+            liKurseElement.querySelector(".action.delete_kurs").addEventListener("click", () => this._askDeleteKurs(entry_kurse._id));
+
+
+             }
         
     }
 
@@ -111,6 +155,32 @@ export default class PageList extends Page {
         }
 
         // Dozent aus Liste entfernen
+        this._mainElement.querySelector(`[data-id="${id}"]`)?.remove();
+
+        if(this._mainElement.querySelector("[data-id]")) {
+            this._emptyMessageElement.classList.add("hidden");
+        } else {
+            this._emptyMessageElement.classList.remove("hidden");
+        }
+    }
+
+    async _askDeleteKurs(id) {
+        // Sicherheitsfrage anzeigen
+        let answer = confirm("Soll dieser Kurs wirklich gelöscht werden?");
+
+        if(!answer) {
+            return;
+        }
+
+        // Kurs löschen
+        try {
+            this._app.backend.fetch("DELETE", `/kurs/${id}`);
+        } catch(ex) {
+            this._app.showException(ex);
+            return;
+        }
+
+        // KUrs aus Liste entfernen
         this._mainElement.querySelector(`[data-id="${id}"]`)?.remove();
 
         if(this._mainElement.querySelector("[data-id]")) {

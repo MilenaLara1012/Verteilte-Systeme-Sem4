@@ -45,7 +45,7 @@ export default class KursController {
     }
 
     /**
-     * GET /kurs
+     * GET /kurse
      * Alle Kurse auslesen
      */
     async search(req, res, next) {
@@ -57,7 +57,7 @@ export default class KursController {
     }
 
     /**
-     * POST /kurs
+     * POST /kurse
      * Neuen Kurs anlegen
      */
     async create(req, res, next) {
@@ -73,7 +73,7 @@ export default class KursController {
 
     /**
      * GET /kurs/{id}
-     * Einene Kurs mit id
+     * Einen Kurs mit id
      */
     async read(req, res, next) {
         let result = await this._service.read(req.params.id);

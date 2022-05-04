@@ -59,12 +59,12 @@ class DatabaseFactory {
             kurse.insertMany([
                 {
                     name: "Mathematik",
-                    prüfungsform: "Klausur",
+                    pruefungsform: "Klausur",
 					ects: 6,
                 },
                 {
                     name: "Verteilte Systeme",
-                    prüfungsform: "Portfolio",
+                    pruefungsform: "Portfolio",
 					ects: 8,
                 },
             ]);

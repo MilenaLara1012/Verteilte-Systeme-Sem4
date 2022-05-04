@@ -55,6 +55,20 @@ class App {
                 url: ".*",
                 show: () => this._gotoList()
             },
+
+            {
+                url: "^/newKurs/$",
+                show: () => this._gotoNewKurs()
+            },
+            {
+                url: "^/editKurs/(.*)$",
+                show: matches => this._gotoEditKurs(matches[1]),
+            },
+
+            {
+                url: ".*",
+                show: () => this._gotoList()
+            },
         ]);
 
         // Fenstertitel merken, um später den Name der aktuellen Seite anzuhängen
@@ -155,6 +169,38 @@ class App {
             this.showException(ex);
         }
     }
+
+
+    /**
+     *Neuen Kurs anlegen
+     */
+     async _gotoNewKurs() {
+        try {
+            let {default: PageEditKurs} = await import("./page-kurs-edit/page-kurs-edit.js");
+
+            let page = new PageEditKurs(this);
+            await page.init();
+            this._showPage(page, "newKurs");
+        } catch(ex) {
+            this.showException(ex);
+        }
+    }
+
+    /**
+     * kurs mit ID bearbeiten
+       */
+    async _gotoEditKurs(id) {
+        try {
+            let {default: PageEditKurs} = await import("./page-kurs-edit/page-kurs-edit.js");
+
+            let page = new PageEditKurs(this, id);
+            await page.init();
+            this._showPage(page, "editKurs");
+        } catch(ex) {
+            this.showException(ex);
+        }
+    }
+
 
     /**
      * Interne Methode zum Umschalten der sichtbaren Seite.
