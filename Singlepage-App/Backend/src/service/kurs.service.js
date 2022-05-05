@@ -42,7 +42,7 @@ export default class KursService {
         let new_kurs = {
             name: kurs.name || "",
             pruefungsform:  kurs.pruefungsform  || "",
-            ects:      kurs.ects     || "",
+            ects:      kurs.ects     || 0,
             
         };
 

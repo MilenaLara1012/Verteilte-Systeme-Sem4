@@ -204,7 +204,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Kurse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kurse'
       operationId: get-kurse
       description: Suche nach Kursen und gebe Liste von Kursen entsprechend der Parameter zurück.
       parameters:
@@ -236,7 +238,7 @@ paths:
                 $ref: '#/components/schemas/Kurse'
       operationId: post-kurse
       description: |-
-        Neuen Kurs anlegen mit Name, Prüfungsform als string und ECTS als Integer.
+        Neuen Kurs anlegen mit Name, Prüfungsform als string und ECTS als integer.
         Id ist auto-generiert.
       requestBody:
         content:
@@ -542,18 +544,18 @@ components:
     Kurse:
       title: Kurse
       type: object
+      description: 'Einträge für Kurse, bestehend aus ID (auto-generated), Name (String), Pruefungsform (String), ECTS (string).'
       properties:
         _link:
           $ref: '#/components/schemas/HATEOAS_Kurse_Ressource'
         _id:
           type: string
-        Name:
+        name:
           type: string
         pruefungsform:
           type: string
-        ECTS:
+        ects:
           type: integer
-      description: 'Einträge für Kurse, bestehend aus ID (auto-generated), Name (String), Pruefungsform (String), ECTS (integer).'
     HATEOAS_Kurse_Ressource:
       title: HATEOAS_Kurse_Ressource
       type: object

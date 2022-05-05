@@ -132,8 +132,53 @@ export default class PageList extends Page {
             liStudierenderElement.querySelector(".action.edit_studierender").addEventListener("click", () => location.hash = `#/editStudierender/${dataset_studierender._id}`);
             liStudierenderElement.querySelector(".action.delete_studierender").addEventListener("click", () => this._askDelete(dataset_studierender._id));
         }
+
+            let data_kurse = await this._app.backend.fetch("GET", "/kurse");
+            this._emptyMessageElementKurse = this._mainElement.querySelector(".empty-placeholder-kurse");
+
+            if(data_kurse.length) {
+                    this._emptyMessageElementKurse.classList.add("hidden");
+                    }
+
         
-    }
+            let olKurseElement = this._mainElement.querySelector(".olkurse");
+
+            let templateKurseElement = this._mainElement.querySelector(".list-kurse-entry");
+            let templateKurseHtml = templateKurseElement.outerHTML;
+            templateKurseElement.remove();
+
+
+
+            for(let index in data_kurse) {
+                // Platzhalter ersetzen
+                let entry_kurse = data_kurse[index];
+                let htmlKurs = templateKurseHtml;
+
+                // Daten speichern
+                let _id = entry_kurse._id;
+                let kursname = entry_kurse.name;
+                let pruefungsform = entry_kurse.pruefungsform;
+                let ects = entry_kurse.ects;
+
+
+                // Daten ins html
+                htmlKurs = htmlKurs.replace("$ID$", _id).replace("$TITEL$", kursname).replace("$PRUEFUNGSFORM$", pruefungsform).replace("$ECTS$", ects);
+
+
+                // Kurs Liste einfügen
+                let dummyKursElement = document.createElement("div");
+                dummyKursElement.innerHTML = htmlKurs;
+                let liKurseElement = dummyKursElement.firstElementChild;
+                liKurseElement.remove();
+                olKurseElement.appendChild(liKurseElement);
+
+                liKurseElement.querySelector(".action.edit_kurs").addEventListener("click", () => location.hash = `#/editKurs/${entry_kurse._id}`);
+                liKurseElement.querySelector(".action.delete_kurs").addEventListener("click", () => this._askDeleteKurs(entry_kurse._id));
+
+
+                 }
+
+        }
 
     /**
      * Hilfsmethode. Zeigt Fenster mit Sicherheitsabfrage an, ob ein Datensatz wirklich gelöscht werden soll.
@@ -191,4 +236,30 @@ export default class PageList extends Page {
             this._emptyMessageElement.classList.remove("hidden");
         }
     }
+
+    async _askDeleteKurs(id) {
+            // Sicherheitsfrage anzeigen
+            let answer = confirm("Soll dieser Kurs wirklich gelöscht werden?");
+
+            if(!answer) {
+                return;
+            }
+
+            // Kurs löschen
+            try {
+                this._app.backend.fetch("DELETE", `/kurs/${id}`);
+            } catch(ex) {
+                this._app.showException(ex);
+                return;
+            }
+
+            // Kurs aus Liste entfernen
+            this._mainElement.querySelector(`[data-id="${id}"]`)?.remove();
+
+            if(this._mainElement.querySelector("[data-id]")) {
+                this._emptyMessageElementKurse.classList.add("hidden");
+            } else {
+                this._emptyMessageElementKurse.classList.remove("hidden");
+            }
+        }
 };
