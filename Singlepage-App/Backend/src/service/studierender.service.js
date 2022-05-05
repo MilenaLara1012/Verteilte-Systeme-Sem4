@@ -12,7 +12,7 @@ export default class StudierenderService {
      * Konstruktor
      */
     constructor() {
-        this._studierende = DatabaseFactory.database.collection("studierende");
+        this._studierender = DatabaseFactory.database.collection("studierender");
     }
 
     /**
@@ -21,7 +21,7 @@ export default class StudierenderService {
      * @returns {Promise} Liste aller gefundenen Studierenden
      */
     async search(query) {
-        let cursor = this._studierende.find(query, {
+        let cursor = this._studierender.find(query, {
             sort: {
                 vorname: 1,
                 nachname: 1,
@@ -48,8 +48,8 @@ export default class StudierenderService {
             email: studierender.email || "",
         };
 
-        let result = await this._studierende.insertOne(newStudierender);
-        return await this._studierende.findOne({
+        let result = await this._studierender.insertOne(newStudierender);
+        return await this._studierender.findOne({
             _id: result.insertedId
         });
     }
@@ -60,7 +60,7 @@ export default class StudierenderService {
      * @returns {Promise} gefundener Studierender
      */
     async read(id) {
-        let result = await this._studierende.findOne({
+        let result = await this._studierender.findOne({
             _id: new ObjectId(id)
         });
         return result;
@@ -73,7 +73,7 @@ export default class StudierenderService {
      * @returns {Promise} abgespeicherter Studierender
      */
     async update(id, studierender) {
-        let oldStudierender = await this._studierende.findOne({
+        let oldStudierender = await this._studierender.findOne({
             _id: new ObjectId(id)
         });
 
@@ -105,17 +105,17 @@ export default class StudierenderService {
             updateDoc.$set.email = studierender.email;
         }
 
-        await this._studierende.updateOne({
+        await this._studierender.updateOne({
             _id: new ObjectId(id)
         },
             updateDoc);
-        return this._studierende.findOne({
+        return this._studierender.findOne({
             _id: new ObjectId(id)
         });
     }
 
     async delete(id) {
-        let result = await this._studierende.deleteOne({
+        let result = await this._studierender.deleteOne({
             _id: new ObjectId(id)
         });
 

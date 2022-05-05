@@ -9,6 +9,7 @@ import DatabaseFactory from "./database.js";
 import RootController from "./controller/root.controller.js";
 import DozentController from "./controller/dozent.controller.js";
 import KursController from "./controller/kurs.controller.js";
+import StudierenderController from "./controller/studierender.controller.js";
 
 // Verzeichnisnamen der Quellcodedatei ermitteln
 import path from "path";
@@ -97,6 +98,7 @@ new RootController(server, "/");
 // Controller-Klasse für Dozenten
 new DozentController(server, "/dozent");
 // @MilenaLara1012 Hier Controller-Klasse eintragen
+new StudierenderController(server, "/studierender");
 new KursController(server, "/kurse");
 
 

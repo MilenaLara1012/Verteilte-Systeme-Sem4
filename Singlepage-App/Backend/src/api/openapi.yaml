@@ -358,8 +358,8 @@ paths:
         - schema:
             type: string
           in: query
-          name: matrikelnummer
-          description: Matrikelnummer
+          name: matrikelnr
+          description: Matrikelnr
     post:
       summary: Neuen Studierenden anlegen
       tags:

@@ -35,6 +35,7 @@ class DatabaseFactory {
         //// oder die Methode ggf. einfach löschen und ihren Aufruf oben entfernen.  ////
         let dozenten = this.database.collection("dozenten");
 		let kurse = this.database.collection("kurse")
+        let studierender = this.database.collection("studierender")
 
         if (await dozenten.estimatedDocumentCount() === 0) {
             dozenten.insertMany([
@@ -54,7 +55,7 @@ class DatabaseFactory {
                 },
             ]);
         }
-		
+
 		if (await kurse.estimatedDocumentCount() === 0) {
             kurse.insertMany([
                 {
@@ -70,7 +71,26 @@ class DatabaseFactory {
             ]);
         }
 
-        // Hier müsstet ihre eure Collections entsprechend wie oben noch implementieren @MilenaLara1012 
+        if (await studierender.estimatedDocumentCount() === 0) {
+            studierender.insertMany([
+                {
+                    vorname: "Johanna",
+                    nachname: "Meier",
+                    alter: "22",
+                    email: "j@meier.de",
+                    matrikelnr: "01761272",
+                },
+                {
+                    vorname: "Moritz",
+                    nachname: "Bierenbreier",
+                    alter: "18",
+                    email: "moritz@bbrei.de",
+                    matrikelnr: "12893683",
+                },
+            ]);
+        }
+
+        // Hier müsstet ihre eure Collections entsprechend wie oben noch implementieren @MilenaLara1012
     }
 }
 

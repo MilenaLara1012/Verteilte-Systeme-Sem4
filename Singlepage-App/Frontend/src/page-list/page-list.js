@@ -88,13 +88,13 @@ export default class PageList extends Page {
         }
 
         let data_studierender = await this._app.backend.fetch("GET", "/studierender");
-        this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
+        this._emptyMessageElementStudierender = this._mainElement.querySelector(".empty-placeholderStudierender");
 
         if(data_studierender.length) {
-            this._emptyMessageElement.classList.add("hidden");
+            this._emptyMessageElementStudierender.classList.add("hidden");
         }
 
-        let olStudierenderElement = this._mainElement.querySelector("ol");
+        let olStudierenderElement = this._mainElement.querySelector(".StudierenderListe");
 
         let templateStudierenderElement = this._mainElement.querySelector(".list-studierender-entry");
         let templateStudierenderHtml = templateStudierenderElement.outerHTML;
@@ -117,7 +117,7 @@ export default class PageList extends Page {
             htmlStudierender = htmlStudierender.replace("$ID$", _id);
             htmlStudierender = htmlStudierender.replace("$VORNAME$", vorname);
             htmlStudierender = htmlStudierender.replace("$NACHNAME$", nachname);
-            htmlStudierender = htmlStudierender.replace("$ALTER$", fakultaet);
+            htmlStudierender = htmlStudierender.replace("$ALTER$", alter);
             htmlStudierender = htmlStudierender.replace("$EMAIL$", email);
             htmlStudierender = htmlStudierender.replace("$MATRIKELNR$", matrikelnr);
 
@@ -130,7 +130,7 @@ export default class PageList extends Page {
 
             //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
             liStudierenderElement.querySelector(".action.edit_studierender").addEventListener("click", () => location.hash = `#/editStudierender/${dataset_studierender._id}`);
-            liStudierenderElement.querySelector(".action.delete_studierender").addEventListener("click", () => this._askDelete(dataset_studierender._id));
+            liStudierenderElement.querySelector(".action.delete_studierender").addEventListener("click", () => this._askDeleteStudierender(dataset_studierender._id));
         }
 
             let data_kurse = await this._app.backend.fetch("GET", "/kurse");
@@ -140,7 +140,7 @@ export default class PageList extends Page {
                     this._emptyMessageElementKurse.classList.add("hidden");
                     }
 
-        
+
             let olKurseElement = this._mainElement.querySelector(".olkurse");
 
             let templateKurseElement = this._mainElement.querySelector(".list-kurse-entry");
@@ -182,8 +182,8 @@ export default class PageList extends Page {
 
     /**
      * Hilfsmethode. Zeigt Fenster mit Sicherheitsabfrage an, ob ein Datensatz wirklich gelöscht werden soll.
-     * @param {*} id 
-     * @returns 
+     * @param {*} id
+     * @returns
      */
     async _askDelete(id) {
         // Sicherheitsfrage anzeigen
@@ -231,9 +231,9 @@ export default class PageList extends Page {
         this._mainElement.querySelector(`[data-id="${id}"]`)?.remove();
 
         if(this._mainElement.querySelector("[data-id]")) {
-            this._emptyMessageElement.classList.add("hidden");
+            this._emptyMessageElementStudierender.classList.add("hidden");
         } else {
-            this._emptyMessageElement.classList.remove("hidden");
+            this._emptyMessageElementStudierender.classList.remove("hidden");
         }
     }
 

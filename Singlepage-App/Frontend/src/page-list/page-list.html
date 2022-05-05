@@ -109,33 +109,33 @@
     <h1>
         Studenten
     </h1>
-    <ol>
+    <ol class="StudierenderListe">
         <!-- Platzhalter für leere Liste definieren -->
-        <li class="empty-placeholder">
+        <li class="empty-placeholderStudierender">
             <div class="name">
                 Keine Einträge vorhanden
             </div>
         </li>
 
         <!-- Vorlage für einen Studenteneintrag in der Liste -->
-        <li class="list-student-entry" data-id="$ID$">
-            <div class="student_name">
+        <li class="list-studierender-entry" data-id="$ID$">
+            <div class="studierender_name">
                 $VORNAME$ $NACHNAME$
             </div>
-            <div class="student_matrnr">
-                MatrNr: $MATRIKELNUMMER$
+            <div class="studierender_matrnr">
+                MatrNr: $MATRIKELNR$
             </div>
-            <div class="student_email">
+            <div class="studierender_email">
                 E-Mail: $EMAIL$
             </div>
-            <div class="student_alter">
+            <div class="studierender_alter">
                 Alter: $ALTER$
             </div>
             <div class="actions">
-                <div class="action edit_student">
+                <div class="action edit_studierender">
                     <a>Ändern</a>
                 </div>
-                <div class="action delete_student">
+                <div class="action delete_studierender">
                     <a>Löschen</a>
                 </div>
             </div>
