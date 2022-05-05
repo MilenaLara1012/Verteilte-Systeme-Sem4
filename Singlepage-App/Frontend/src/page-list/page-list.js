@@ -34,14 +34,9 @@ export default class PageList extends Page {
         this._title = "Übersicht";
 
         let data_dozent = await this._app.backend.fetch("GET", "/dozent");
-        let data_kurse = await this._app.backend.fetch("GET", "/kurse");
         this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
 
         if(data_dozent.length) {
-            this._emptyMessageElement.classList.add("hidden");
-        }
-
-        if(data_kurse.length) {
             this._emptyMessageElement.classList.add("hidden");
         }
 
@@ -87,49 +82,56 @@ export default class PageList extends Page {
             liDozentElement.remove();
             olDozentElement.appendChild(liDozentElement);
 
-             //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
-             liDozentElement.querySelector(".action.edit_dozent").addEventListener("click", () => location.hash = `#/editDozent/${dataset_dozent._id}`);
-             liDozentElement.querySelector(".action.delete_dozent").addEventListener("click", () => this._askDelete(dataset_dozent._id));
- 
+            //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
+            liDozentElement.querySelector(".action.edit_dozent").addEventListener("click", () => location.hash = `#/editDozent/${dataset_dozent._id}`);
+            liDozentElement.querySelector(".action.delete_dozent").addEventListener("click", () => this._askDelete(dataset_dozent._id));
         }
 
+        let data_studierender = await this._app.backend.fetch("GET", "/studierender");
+        this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
 
-        let olKurseElement = this._mainElement.querySelector("ol");
+        if(data_studierender.length) {
+            this._emptyMessageElement.classList.add("hidden");
+        }
 
-        let templateKurseElement = this._mainElement.querySelector(".list-kurse-entry");
-        let templateKurseHtml = templateKurseElement.outerHTML;
-        templateKurseElement.remove();
+        let olStudierenderElement = this._mainElement.querySelector("ol");
 
-        
+        let templateStudierenderElement = this._mainElement.querySelector(".list-studierender-entry");
+        let templateStudierenderHtml = templateStudierenderElement.outerHTML;
+        templateStudierenderElement.remove();
 
-        for(let index in data_kurse) {
+        for(let index in data_studierender) {
             // Platzhalter ersetzen
-            let entry_kurse = data_kurse[index];
-            let htmlKurs = templateKurseHtml;
+            let dataset_studierender = data_studierender[index];
+            let htmlStudierender = templateStudierenderHtml;
 
-            // Daten speichern
-            let _id = entry_kurse._id;
-            let kursname = entry_kurse.name;
-            let prüfungsform = entry_kurse.pruefungsform;
-            let ects = entry_kurse.ects;
+            // Daten einens Studierenden zw.speichern
+            let _id = dataset_studierender._id;
+            let vorname = dataset_studierender.vorname;
+            let nachname = dataset_studierender.nachname;
+            let alter = dataset_studierender.alter;
+            let email = dataset_studierender.email;
+            let matrikelnr = dataset_studierender.matrikelnr;
 
+            // Daten dem htmlStudierender hinzufügen zum Anzeigen der Daten
+            htmlStudierender = htmlStudierender.replace("$ID$", _id);
+            htmlStudierender = htmlStudierender.replace("$VORNAME$", vorname);
+            htmlStudierender = htmlStudierender.replace("$NACHNAME$", nachname);
+            htmlStudierender = htmlStudierender.replace("$ALTER$", fakultaet);
+            htmlStudierender = htmlStudierender.replace("$EMAIL$", email);
+            htmlStudierender = htmlStudierender.replace("$MATRIKELNR$", matrikelnr);
 
-            // Daten ins html
-            htmlKurs = htmlKurs.replace("$ID$", _id).replace("$TITEL$", kursname).replace("$PRUEFUNGSFORM$", prüfungsform).replace("$ECTS$", ects);
-           
+            // Studierender-Element in die Liste einfügen
+            let dummyStudierenderElement = document.createElement("div");
+            dummyStudierenderElement.innerHTML = htmlStudierender;
+            let liStudierenderElement = dummyStudierenderElement.firstElementChild;
+            liStudierenderElement.remove();
+            olStudierenderElement.appendChild(liStudierenderElement);
 
-            // Kurs Liste einfügen
-            let dummyKursElement = document.createElement("div");
-            dummyKursElement.innerHTML = htmlKurs;
-            let liKurseElement = dummyKursElement.firstElementChild;
-            liKurseElement.remove();
-            olKurseElement.appendChild(liKurseElement);
-
-            liKurseElement.querySelector(".action.edit_kurs").addEventListener("click", () => location.hash = `#/ediKurs/${entry_kurse._id}`);
-            liKurseElement.querySelector(".action.delete_kurs").addEventListener("click", () => this._askDeleteKurs(entry_kurse._id));
-
-
-             }
+            //// TODO: Neue Methoden für Event Handler anlegen und hier registrieren ////
+            liStudierenderElement.querySelector(".action.edit_studierender").addEventListener("click", () => location.hash = `#/editStudierender/${dataset_studierender._id}`);
+            liStudierenderElement.querySelector(".action.delete_studierender").addEventListener("click", () => this._askDelete(dataset_studierender._id));
+        }
         
     }
 
@@ -164,23 +166,23 @@ export default class PageList extends Page {
         }
     }
 
-    async _askDeleteKurs(id) {
+    async _askDeleteStudierender(id) {
         // Sicherheitsfrage anzeigen
-        let answer = confirm("Soll dieser Kurs wirklich gelöscht werden?");
+        let answer = confirm("Soll dieser Studierende wirklich gelöscht werden?");
 
         if(!answer) {
             return;
         }
 
-        // Kurs löschen
+        // Studierender löschen
         try {
-            this._app.backend.fetch("DELETE", `/kurs/${id}`);
+            this._app.backend.fetch("DELETE", `/studierender/${id}`);
         } catch(ex) {
             this._app.showException(ex);
             return;
         }
 
-        // KUrs aus Liste entfernen
+        // Studierender aus Liste entfernen
         this._mainElement.querySelector(`[data-id="${id}"]`)?.remove();
 
         if(this._mainElement.querySelector("[data-id]")) {
