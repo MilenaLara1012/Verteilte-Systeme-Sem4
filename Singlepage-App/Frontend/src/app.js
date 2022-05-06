@@ -148,9 +148,9 @@ class App {
      */
     async _gotoNewStudierender() {
         try {
-            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-studierender-edit.js");
+            let {default: PageStudierenderEdit} = await import("./page-studierender-edit/page-studierender-edit.js");
 
-            let page = new PageEditStudierender(this);
+            let page = new PageStudierenderEdit(this);
             await page.init();
             this._showPage(page, "newStudierender");
         } catch (ex) {
@@ -160,9 +160,9 @@ class App {
 
     async _gotoEditStudierender(id) {
         try {
-            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-studierender-edit.js");
+            let {default: PageStudierenderEdit} = await import("./page-studierender-edit/page-studierender-edit.js");
 
-            let page = new PageEditStudierender(this, id);
+            let page = new PageStudierenderEdit(this, id);
             await page.init();
             this._showPage(page, "editStudierender");
         } catch (ex) {
