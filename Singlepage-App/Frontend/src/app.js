@@ -37,10 +37,6 @@ class App {
                 url: "^/editDozent/(.*)$",
                 show: matches => this._gotoEditDozent(matches[1]),
             },
-            {
-                url: ".*",
-                show: () => this._gotoList()
-            },
 
             // Routing-Regeln für Studierender
             {
@@ -50,10 +46,6 @@ class App {
             {
                 url: "^/editStudierender/(.*)$",
                 show: matches => this._gotoEditStudierender(matches[1]),
-            },
-            {
-                url: ".*",
-                show: () => this._gotoList()
             },
 
             {
