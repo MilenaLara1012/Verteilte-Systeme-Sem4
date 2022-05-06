@@ -42,7 +42,7 @@ export default class PageKursEdit extends Page {
 
         // temp
         let name = this._dataset_kurs.name;
-        let pruefungsform = parseInt(this._dataset_kurs.pruefungsform);
+        let pruefungsform = this._dataset_kurs.pruefungsform;
         let ects = this._dataset_kurs.ects;
 
 
