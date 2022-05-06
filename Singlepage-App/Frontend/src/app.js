@@ -160,7 +160,7 @@ class App {
 
     async _gotoEditStudierender(id) {
         try {
-            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-dozent-edit.js");
+            let {default: PageEditStudierender} = await import("./page-studierender-edit/page-studierender-edit.js");
 
             let page = new PageEditStudierender(this, id);
             await page.init();
